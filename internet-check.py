@@ -2,10 +2,18 @@
 It is initialized as a service.
 """
 
+import logging
 import os
 import time
 
 import requests
+
+# Configure logging
+logging.basicConfig(
+    filename='internet_check.log',
+    format='%(asctime)s [%(levelname)s] - %(message)s',
+    level=logging.INFO
+)
 
 # Define the number of retries and other configuration options
 MAX_RETRIES = 6
@@ -25,14 +33,18 @@ def internet_check():
             # If the response status code is 200, it means the request was successful
             if response.status_code == 200:
                 attempts = 0  # Reset the attempts counter upon success
+                logging.info("Internet connection is active.")
             else:
+                logging.warning("Internet connection is down or response status is not 200.")
                 # Anything different means the device is not connected or something went wrong
                 attempts += 1
 
         except requests.ConnectionError:
+            logging.error("Connection error. Internet connection is down.")
             # If an exception is raised, it means the device is not connected to the internet
             attempts += 1
 
+        logging.info("Attempt number: [{}]".format(attempts))
         # If we've reached the maximum number of retries without success, reboot the system
         if attempts >= MAX_RETRIES:
 
@@ -44,7 +56,7 @@ def internet_check():
 
             except Exception as e:
                 # If anything happens, it will try again after the sleep
-                pass
+                logging.error(f"Failed to reboot the system: {str(e)}", exc_info=False)
 
         # Sleep for a custom delay before the next attempt
         time.sleep(RETRY_DELAY_SECONDS)
