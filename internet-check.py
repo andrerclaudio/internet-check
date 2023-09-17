@@ -35,16 +35,15 @@ def internet_check():
                 attempts = 0  # Reset the attempts counter upon success
                 logging.info("Internet connection is active.")
             else:
-                logging.warning("Internet connection is down or response status is not 200.")
+                logging.warning("[{}] Internet connection is down or response status is not 200.".format(attempts))
                 # Anything different means the device is not connected or something went wrong
                 attempts += 1
 
         except requests.ConnectionError:
-            logging.error("Connection error. Internet connection is down.")
+            logging.error("[{}] Connection error. Internet connection is down.".format(attempts))
             # If an exception is raised, it means the device is not connected to the internet
             attempts += 1
 
-        logging.info("Attempt number: [{}]".format(attempts))
         # If we've reached the maximum number of retries without success, reboot the system
         if attempts >= MAX_RETRIES:
 
