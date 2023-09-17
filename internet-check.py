@@ -4,15 +4,17 @@ It is initialized as a service.
 
 import os
 import time
+
 import requests
 
 # Define the number of retries and other configuration options
-MAX_RETRIES = 3
-RETRY_DELAY_SECONDS = 60
+MAX_RETRIES = 6
+RETRY_DELAY_SECONDS = (60 * 10)  # Seconds * Minutes
 CHECK_URL = "https://www.google.com"
 
-def internet_check():
 
+def internet_check():
+    # Counter the number of retries
     attempts = 0
 
     while True:
@@ -24,7 +26,7 @@ def internet_check():
             if response.status_code == 200:
                 attempts = 0  # Reset the attempts counter upon success
             else:
-                # Anything differente means the device is not connected or something is wrong
+                # Anything different means the device is not connected or something went wrong
                 attempts += 1
 
         except requests.ConnectionError:
@@ -41,6 +43,7 @@ def internet_check():
                 break
 
             except Exception as e:
+                # If anything happens, it will try again after the sleep
                 pass
 
         # Sleep for a custom delay before the next attempt
