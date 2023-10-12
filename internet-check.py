@@ -33,6 +33,9 @@ def internet_check():
 
     while True:
 
+        # Increase the attempt count
+        attempts += 1
+
         try:
             # Attempt to send a GET request to the configured URL
             response = requests.get(CHECK_URL, timeout=5)
@@ -43,14 +46,10 @@ def internet_check():
             else:
                 # Anything different means the device is not connected or something went wrong
                 logging.warning("[{}] Internet connection is down or response status is not 200.".format(attempts))
-                # Increase the attempt count
-                attempts += 1
 
         except requests.ConnectionError:
             # If an exception is raised, it means the device is not connected to the internet
             logging.error("[{}] Connection error. Internet connection is down.".format(attempts))
-            # Increase the attempt count
-            attempts += 1
 
         finally:            
             # If we've reached the maximum number of retries without success, reboot the system
