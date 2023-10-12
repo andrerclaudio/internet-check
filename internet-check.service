@@ -1,0 +1,14 @@
+[Unit]
+Description=Internet Connection Checker Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/bridge/internet-check/internet-check.py
+WorkingDirectory=/home/bridge/internet-check
+Restart=on-failure
+RestartSec=5
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
