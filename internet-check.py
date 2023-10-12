@@ -33,6 +33,9 @@ def internet_check():
 
     while True:
 
+        # Increase the attempt count
+        attempts += 1
+
         try:
             # Attempt to send a GET request to the configured URL
             response = requests.get(CHECK_URL, timeout=5)
@@ -41,27 +44,26 @@ def internet_check():
                 attempts = 0  # Reset the attempts counter upon success
                 logging.info("Internet connection is active.")
             else:
-                logging.warning("[{}] Internet connection is down or response status is not 200.".format(attempts))
                 # Anything different means the device is not connected or something went wrong
-                attempts += 1
+                logging.warning("[{}] Internet connection is down or response status is not 200.".format(attempts))
 
         except requests.ConnectionError:
-            logging.error("[{}] Connection error. Internet connection is down.".format(attempts))
             # If an exception is raised, it means the device is not connected to the internet
-            attempts += 1
+            logging.error("[{}] Connection error. Internet connection is down.".format(attempts))
 
-        # If we've reached the maximum number of retries without success, reboot the system
-        if attempts >= MAX_RETRIES:
-
-            # Attempt to reboot the system and handle any exceptions
-            try:
-                os.system("sudo reboot")
-                # Exit the loop since the system will restart
-                break
-
-            except Exception as e:
-                # If anything happens, it will try again after the sleep
-                logging.error(f"Failed to reboot the system: {str(e)}", exc_info=False)
+        finally:            
+            # If we've reached the maximum number of retries without success, reboot the system
+            if attempts >= MAX_RETRIES:
+    
+                # Attempt to reboot the system and handle any exceptions
+                try:
+                    os.system("sudo reboot")
+                    # Exit the loop since the system will restart
+                    break
+    
+                except Exception as e:
+                    # If anything happens, it will try again after the sleep
+                    logging.error(f"Failed to reboot the system: {str(e)}", exc_info=False)
 
         # Sleep for a custom delay before the next attempt
         time.sleep(RETRY_DELAY_SECONDS)
