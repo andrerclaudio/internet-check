@@ -25,6 +25,12 @@ def internet_check():
     # Counter the number of retries
     attempts = 0
 
+    # The application start from here
+    logging.info('The application ha started!')
+
+    # Just a delay doing nothing and making sure the connection was properly established.
+    time.sleep(60)
+
     while True:
 
         try:
