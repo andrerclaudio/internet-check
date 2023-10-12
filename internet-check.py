@@ -10,7 +10,7 @@ import requests
 
 # Configure logging
 logging.basicConfig(
-    filename='internet_check.log',
+    filename='internet-check.log',
     format='%(asctime)s [%(levelname)s] - %(message)s',
     level=logging.INFO
 )
