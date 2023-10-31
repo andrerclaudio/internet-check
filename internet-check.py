@@ -25,7 +25,7 @@ def internet_check():
     attempts = 0
 
     # The application start from here
-    logging.info('The application ha started!')
+    logging.info('The application has started!')
 
     # Just a delay doing nothing and making sure the connection was properly established.
     time.sleep(60)
