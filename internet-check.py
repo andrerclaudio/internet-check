@@ -5,12 +5,11 @@ It is initialized as a service.
 import logging
 import os
 import time
-
 import requests
 
 # Configure logging
 logging.basicConfig(
-    filename='internet-check.log',
+    # filename='internet-check.log',
     format='%(asctime)s [%(levelname)s] - %(message)s',
     level=logging.INFO
 )
@@ -42,7 +41,7 @@ def internet_check():
             # If the response status code is 200, it means the request was successful
             if response.status_code == 200:
                 attempts = 0  # Reset the attempts counter upon success
-                logging.info("Internet connection is active.")
+                logging.debug("Internet connection is active.")
             else:
                 # Anything different means the device is not connected or something went wrong
                 logging.warning("[{}] Internet connection is down or response status is not 200.".format(attempts))
